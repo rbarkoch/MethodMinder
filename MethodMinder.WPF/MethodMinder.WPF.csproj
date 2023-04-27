@@ -1,15 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
+		<Authors>Ronnie Bar-Kochba</Authors>
+		<Description>Method debouncers for WPF using dispatchers.</Description>
+		<PackageProjectUrl>https://github.com/rbarkoch/MethodMinder</PackageProjectUrl>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		
 		<TargetFrameworks>net6.0-windows;net48</TargetFrameworks>
-		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<UseWPF>true</UseWPF>
 		<LangVersion>10</LangVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\MethodMinder.Core\MethodMinder.Core.csproj" />
+		<ProjectReference Include="..\MethodMinder.Core\MethodMinder.Core.csproj" />
 	</ItemGroup>
 
 </Project>

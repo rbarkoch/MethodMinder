@@ -1,8 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
+		<Authors>Ronnie Bar-Kochba</Authors>
+		<Description>Method debouncers for .NET.</Description>
+		<PackageProjectUrl>https://github.com/rbarkoch/MethodMinder</PackageProjectUrl>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<LangVersion>10</LangVersion>
+		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
 </Project>

@@ -1,8 +1,12 @@
-﻿namespace MethodMinder.Core.Examples
+﻿using System;
+using System.Threading;
+
+namespace MethodMinder.Core.Examples
 {
     internal class Program
     {
         static DebouncedAction action;
+
         static void Main(string[] args)
         {
             action = new DebouncedAction(MyMethod)
