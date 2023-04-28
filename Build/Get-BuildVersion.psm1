@@ -1,5 +1,8 @@
-Function GetBuildVersion {
-    Param (
+# Credit to James Croft for providing this PowerShell script.
+# https://www.jamescroft.co.uk/how-to-build-publish-nuget-packages-with-github-actions/
+
+function Get-BuildVersion {
+    param (
         [string]$VersionString
     )
 
