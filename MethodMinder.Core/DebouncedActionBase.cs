@@ -34,7 +34,7 @@ namespace MethodMinder.Core
         private void DebounceTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             Halt();
-            Invoke();
+            DebouncedInvoke();
         }
 
         /// <inheritdoc />

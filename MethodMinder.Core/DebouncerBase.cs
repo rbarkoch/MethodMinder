@@ -21,9 +21,9 @@ namespace MethodMinder.Core
         protected abstract void RestartTiming();
 
         /// <summary>
-        /// Halts any pending execution and executes immediately.
+        /// Invoke which is called after a debounce completes.
         /// </summary>
-        public abstract void Invoke();
+        protected abstract void DebouncedInvoke();
 
         /// <summary>
         /// Halts and pending execution of the debouncer.

@@ -42,7 +42,7 @@ namespace MethodMinder.WPF
         private void DebounceTimer_Tick(object? sender, EventArgs e)
         {
             Halt();
-            Invoke();
+            DebouncedInvoke();
         }
 
         /// <inheritdoc />

@@ -25,6 +25,12 @@ namespace MethodMinder.WPF
             _action = action;
         }
 
+        /// <inheritdoc />
+        protected override void DebouncedInvoke()
+        {
+            Invoke();
+        }
+
         /// <summary>
         /// Defers the invocation of the action.
         /// </summary>
@@ -34,7 +40,7 @@ namespace MethodMinder.WPF
         }
 
         /// <inheritdoc />
-        public override void Invoke()
+        public void Invoke()
         {
             Halt();
             _action.Invoke();
@@ -52,6 +58,12 @@ namespace MethodMinder.WPF
             _action = action;
         }
 
+        /// <inheritdoc />
+        protected override void DebouncedInvoke()
+        {
+            Invoke(_arg);
+        }
+
         /// <summary>
         /// Defers the invocation of the action and queues the arguments of the invocation.
         /// </summary>
@@ -66,10 +78,11 @@ namespace MethodMinder.WPF
         }
 
         /// <inheritdoc />
-        public override void Invoke()
+        public void Invoke(T arg)
         {
             Halt();
             Dispatcher.Invoke(() => _action(_arg), DispatcherPriority);
+            _arg = default;
         }
     }
 }

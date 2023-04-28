@@ -23,6 +23,12 @@ namespace MethodMinder.Core
             _action = action;
         }
 
+        /// <inheritdoc />
+        protected override void DebouncedInvoke()
+        {
+            Invoke();
+        }
+
         /// <summary>
         /// Defers the invocation of the action.
         /// </summary>
@@ -32,7 +38,7 @@ namespace MethodMinder.Core
         }
 
         /// <inheritdoc />
-        public override void Invoke()
+        public void Invoke()
         {
             Halt();
             _action.Invoke();
@@ -58,6 +64,12 @@ namespace MethodMinder.Core
             _action = action;
         }
 
+        /// <inheritdoc />
+        protected override void DebouncedInvoke()
+        {
+            Invoke(_arg);
+        }
+
         /// <summary>
         /// Defers the invocation of the action and queues the arguments of the invocation.
         /// </summary>
@@ -72,10 +84,10 @@ namespace MethodMinder.Core
         }
 
         /// <inheritdoc />
-        public override void Invoke()
+        public void Invoke(T arg)
         {
             Halt();
-            _action.Invoke(_arg);
+            _action.Invoke(arg);
             _arg = default;
         }
     }
