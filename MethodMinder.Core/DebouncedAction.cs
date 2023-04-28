@@ -6,144 +6,77 @@ using System.Timers;
 
 namespace MethodMinder.Core
 {
-    public class DebouncedAction : IDisposable
+    /// <summary>
+    /// Debouncer based on <see cref="System.Timers.Timer"/> which calls an action with no arguments.
+    /// </summary>
+    public class DebouncedAction : DebouncedActionBase
     {
-        public TimeSpan DebounceInterval
-        {
-            get => TimeSpan.FromMilliseconds(_debounceTimer.Interval);
-            set => _debounceTimer.Interval = value.TotalMilliseconds;
-        }
-
-        public TimeSpan MaximumDelay { get; set; } = TimeSpan.MaxValue;
-
-        public bool IsDebouncing => _debounceTimer.Enabled;
-
-        private DateTime _initialCallTime;
-        private Timer _debounceTimer;
         private Action _action;
 
-        public DebouncedAction(Action action)
+        /// <summary>
+        /// Constructor for <see cref="DebouncedAction"/>.
+        /// </summary>
+        /// <param name="interval">Minimum time from when the method is debounced to when it is invoked.</param>
+        /// <param name="action">Action to invoke when the debounce completes.</param>
+        public DebouncedAction(TimeSpan interval, Action action) : base(interval)
         {
             _action = action;
-            _debounceTimer = new Timer()
-            {
-                AutoReset = false
-            };
-            _debounceTimer.Elapsed += DebounceTimer_Elapsed;
         }
 
-        private void DebounceTimer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            Invoke();
-        }
-
+        /// <summary>
+        /// Defers the invocation of the action.
+        /// </summary>
         public void Debounce()
         {
-            if(IsDebouncing)
-            {
-                if(DateTime.Now - _initialCallTime > MaximumDelay)
-                {
-                    Invoke();
-                    return;
-                }
-
-                _debounceTimer.Stop();
-                _debounceTimer.Start();
-            }
-            else
-            {
-                _initialCallTime = DateTime.Now;
-                _debounceTimer.Start();
-            }
+            RestartTiming();
         }
 
-        public void Invoke()
+        /// <inheritdoc />
+        public override void Invoke()
         {
             Halt();
             _action.Invoke();
         }
-
-        public void Halt()
-        {
-            _debounceTimer.Stop();
-        }
-
-        public void Dispose()
-        {
-            _debounceTimer.Dispose();
-        }
     }
 
-    public class DebouncedAction<T> : IDisposable
+    /// <summary>
+    /// Debouncer based on <see cref="System.Timers.Timer"/> which calls an action with one arguments.
+    /// </summary>
+    public class DebouncedAction<T> : DebouncedActionBase
     {
-        public TimeSpan DebounceInterval
-        {
-            get => TimeSpan.FromMilliseconds(_debounceTimer.Interval);
-            set => _debounceTimer.Interval = value.TotalMilliseconds;
-        }
-
-        public TimeSpan MaximumDelay { get; set; } = TimeSpan.MaxValue;
-
-        public bool IsDebouncing => _debounceTimer.Enabled;
-
-
-        private DateTime _initialCallTime;
-        private Timer _debounceTimer;
         private Action<T> _action;
 
-        private T _arg;
+        private T? _arg;
 
-        public DebouncedAction(Action<T> action)
+        /// <summary>
+        /// Constructor for <see cref="DebouncedAction{T}"/>.
+        /// </summary>
+        /// <param name="interval">Minimum time from when the method is debounced to when it is invoked.</param>
+        /// <param name="action">Action to invoke when the debounce completes.</param>
+        public DebouncedAction(TimeSpan debounceInterval, Action<T> action) : base(debounceInterval)
         {
             _action = action;
-            _debounceTimer = new Timer()
-            {
-                AutoReset = false
-            };
-            _debounceTimer.Elapsed += DebounceTimer_Elapsed;
         }
 
-        private void DebounceTimer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            Invoke();
-        }
-
+        /// <summary>
+        /// Defers the invocation of the action and queues the arguments of the invocation.
+        /// </summary>
+        /// <remarks>
+        /// The invocation will pass arguments based on the latest call to the <see cref="Debounce(T)"/>.
+        /// </remarks>
+        /// <param name="arg">Arguments which will be passed to the invocation of the action.</param>
         public void Debounce(T arg)
         {
             _arg = arg;
-
-            if (IsDebouncing)
-            {
-                if (DateTime.Now - _initialCallTime > MaximumDelay)
-                {
-                    Invoke();
-                    return;
-                }
-
-                _debounceTimer.Stop();
-                _debounceTimer.Start();
-            }
-            else
-            {
-                _initialCallTime = DateTime.Now;
-                _debounceTimer.Start();
-            }
+            RestartTiming();
         }
 
-        public void Invoke()
+        /// <inheritdoc />
+        public override void Invoke()
         {
             Halt();
             _action.Invoke(_arg);
-        }
-
-        public void Halt()
-        {
-            _debounceTimer.Stop();
-        }
-
-        public void Dispose()
-        {
-            _debounceTimer.Dispose();
+            _arg = default;
         }
     }
 }
